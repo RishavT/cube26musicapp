@@ -15,7 +15,7 @@ class User(db.Model):
 	username = db.Column(db.String(80), unique=True)
 	email = db.Column(db.String(120), unique=True)
 	pwdhash = db.Column(db.String(66))
-	songs = db.relationship(Song, db.backref='user')
+	songs = db.relationship(Song, backref='user')
 
 	def __init__(self,username,email,password):
 		self.username = username
