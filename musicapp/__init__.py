@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-import musicapp.routes import *
+from musicapp.routes import *
 from musicapp.models import *
 
 
