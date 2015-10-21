@@ -5,9 +5,9 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from flask import render_template, request, flash
 
-from forms import *
-from models import *
-from hello import app
+from forms import ContactForm,SignupForm
+from models import User,Song
+from hello import app,db
 
 @app.route('/')
 def home():

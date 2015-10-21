@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, validators, ValidationError, PasswordField
-from models import *
+from models import User,Song
+from hello import app,db
+
 class ContactForm(Form):
 	name = TextField("Name")
 	email = TextField("Email")

@@ -2,7 +2,7 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
-from hello import *
+from hello import app,db
 
 class User(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
