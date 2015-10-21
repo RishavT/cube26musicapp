@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
-from flask.ext.wtf import Form, validators, ValidationError
-from wtforms import TextField, BooleanField, TextAreaField, SubmitField, PasswordField
+from flask.ext.wtf import Form, validators
+from wtforms import TextField, BooleanField, TextAreaField, SubmitField, PasswordField, ValidationError
 from musicapp.models import User,Song
 #from hello import db
 
