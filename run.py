@@ -1,4 +1,4 @@
 #!/usr/bin/python
 import os
-from musicapp import app
-app.run(debug=True,port=33507)
+from musicapp import app,db
+#app.run(debug=True)
