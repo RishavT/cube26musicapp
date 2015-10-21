@@ -5,8 +5,8 @@ import os
 
 app = Flask(__name__)
 
-from routes import *
-from models import *
+import musicapp.routes import *
+from musicapp.models import *
 
 
 app.debug = True
