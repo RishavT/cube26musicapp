@@ -8,7 +8,34 @@ from musicapp import db
 #from db import relationship, backref
 #from sqlalchemy.orm import relationship, backref
 #from sqlalchemy.ext.declarative import declarative_base
+class Song(db.Model):
+songdata = db.Column(db.String(500), primary_key=True)
+user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+link = db.Column(db.String(500))
+upvotes = db.Column(db.Integer)
+downvotes = db.Column(db.Integer)
 
+def __init__(self,songdata,link,user_id):
+	self.upvotes = 0
+	self.downvotes = 0
+	self.songdata = songdata
+	self.link = link
+	self.user_id = user_id
+
+def __repr__(self):
+	return '<Song %r>' % self.songdata
+	
+def get_song_details(self):
+	retval = {}
+	retval['name'] = self.songdata[0]
+	retval['album'] = self.songdata[1]
+	retval['artist'] = self.songdata[2]
+	return retval
+	
+def upvote(user_id):
+	self.upvotes += 1
+def downvote(user_id):
+	self.downvote += 1
 
 class User(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
@@ -33,31 +60,3 @@ class User(db.Model):
 	def get_song_list(self):
 		pass
 
-class Song(db.Model):
-	songdata = db.Column(db.String(500), primary_key=True)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	link = db.Column(db.String(500))
-	upvotes = db.Column(db.Integer)
-	downvotes = db.Column(db.Integer)
-
-	def __init__(self,songdata,link,user_id):
-		self.upvotes = 0
-		self.downvotes = 0
-		self.songdata = songdata
-		self.link = link
-		self.user_id = user_id
-
-	def __repr__(self):
-		return '<Song %r>' % self.songdata
-		
-	def get_song_details(self):
-		retval = {}
-		retval['name'] = self.songdata[0]
-		retval['album'] = self.songdata[1]
-		retval['artist'] = self.songdata[2]
-		return retval
-		
-	def upvote(user_id):
-		self.upvotes += 1
-	def downvote(user_id):
-		self.downvote += 1
