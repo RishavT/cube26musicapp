@@ -4,6 +4,7 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from musicapp import db
+WTF_CSRF_CHECK_DEFAULT = False
 #from db import Table, Column, Integer, ForeignKey
 #from db import relationship, backref
 #from sqlalchemy.orm import relationship, backref
