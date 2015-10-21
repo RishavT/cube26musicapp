@@ -2,8 +2,8 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 
-from models.py import *
-from views.py import *
+#from models import *
+#from views import *
 
 app = Flask(__name__)
 app.debug = True
