@@ -2,7 +2,7 @@
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, validators, ValidationError, PasswordField
 from models import User,Song
-from hello import app,db
+#from hello import db
 
 class ContactForm(Form):
 	name = TextField("Name")
