@@ -4,7 +4,7 @@ from flask.ext.wtf import Form
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField, PasswordField, ValidationError, validators
 from musicapp.models import User,Song
 #from hello import db
-WTF_CSRF_CHECK_DEFAULT = False
+#WTF_CSRF_CHECK_DEFAULT = False
 class ContactForm(Form):
 	name = TextField("Name")
 	email = TextField("Email")

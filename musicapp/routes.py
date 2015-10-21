@@ -4,13 +4,15 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from flask import render_template, request, flash
-WTF_CSRF_CHECK_DEFAULT = False
+#WTF_CSRF_CHECK_DEFAULT = False
 #from db import Table, Column, Integer, ForeignKey
 #from db import relationship, backref
 
 from musicapp.forms import ContactForm,SignupForm
 from musicapp.models import User,Song
 from musicapp import app,db
+
+app.secret_key = 'development key'
 
 @app.route('/')
 def home():
