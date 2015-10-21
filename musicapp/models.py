@@ -1,8 +1,10 @@
 #!/usr/bin/python
+import os
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from musicapp import db
+
 
 class User(db.Model):
 	id = db.Column(db.Integer,primary_key=True)

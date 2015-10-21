@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import os
 
 def runcommand(db,sqlcommand):
 	a = db.engine.execute(sqlcommand)
