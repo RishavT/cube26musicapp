@@ -4,8 +4,8 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from flask import render_template, request, flash
-from db import Table, Column, Integer, ForeignKey
-from db import relationship, backref
+#from db import Table, Column, Integer, ForeignKey
+#from db import relationship, backref
 
 from musicapp.forms import ContactForm,SignupForm
 from musicapp.models import User,Song
