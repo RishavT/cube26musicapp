@@ -5,7 +5,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from flask import render_template, request, flash
 
-from forms import ContactForm,SignupForm
+from musicapp.forms import ContactForm,SignupForm
 from musicapp.models import User,Song
 from musicapp import app,db
 
