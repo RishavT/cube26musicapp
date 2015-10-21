@@ -6,8 +6,8 @@ from werkzeug import generate_password_hash, check_password_hash
 from flask import render_template, request, flash
 
 from forms import ContactForm,SignupForm
-from models import User,Song
-from hello import app,db
+from musicapp.models import User,Song
+from musicapp import app,db
 
 @app.route('/')
 def home():

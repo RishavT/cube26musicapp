@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from flask.ext.wtf import Form, TextField, TextAreaField, SubmitField, validators, ValidationError, PasswordField
-from models import User,Song
+from musicapp.models import User,Song
 #from hello import db
 
 class ContactForm(Form):
