@@ -4,6 +4,10 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from musicapp import db
+#from db import Table, Column, Integer, ForeignKey
+#from db import relationship, backref
+#from sqlalchemy.orm import relationship, backref
+#from sqlalchemy.ext.declarative import declarative_base
 
 
 class User(db.Model):
@@ -11,7 +15,7 @@ class User(db.Model):
 	username = db.Column(db.String(80), unique=True)
 	email = db.Column(db.String(120), unique=True)
 	pwdhash = db.Column(db.String(66))
-	songs = relationship(Song, backref='user')
+	songs = db.relationship(Song, db.backref='user')
 
 	def __init__(self,username,email,password):
 		self.username = username
@@ -30,11 +34,11 @@ class User(db.Model):
 		pass
 
 class Song(db.Model):
-	songdata = Column(db.String(500), primary_key=True)
-	user_id = Column(Integer, ForeignKey('user.id'))
-	link = Column(db.String(500))
-	upvotes = Column(db.Integer)
-	downvotes = Column(db.Integer)
+	songdata = db.Column(db.String(500), primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	link = db.Column(db.String(500))
+	upvotes = db.Column(db.Integer)
+	downvotes = db.Column(db.Integer)
 
 	def __init__(self,songdata,link,user_id):
 		self.upvotes = 0
