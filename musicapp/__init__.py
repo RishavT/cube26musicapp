@@ -5,11 +5,14 @@ import os
 
 app = Flask(__name__)
 
-from musicapp.routes import *
-from musicapp.models import *
+
+
 
 
 app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 db = []
+
+from musicapp.routes import *
+from musicapp.models import *
