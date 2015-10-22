@@ -3,14 +3,11 @@
 {% block content %}
 	<h2>Sign up</h2>
  
-	{% for message in form.firstname.errors %}
+	{% for message in form.username.errors %}
 		<div class="flash">{{ message }}</div>
 	{% endfor %}
 	 
-	{% for message in form.lastname.errors %}
-		<div class="flash">{{ message }}</div>
-	{% endfor %}
-	 
+		 
 	{% for message in form.email.errors %}
 		<div class="flash">{{ message }}</div>
 	{% endfor %}
