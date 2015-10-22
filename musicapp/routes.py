@@ -1,18 +1,19 @@
 #!/usr/bin/python
-import os
-#import eyes3
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash, secure_filename
 from flask import render_template, request, flash, session, url_for, redirect
-#WTF_CSRF_CHECK_DEFAULT = False
-#from db import Table, Column, Integer, ForeignKey
-#from db import relationship, backref
+
+from hashlib import sha1
+import time, os, json, base64, hmac, urllib
+
 
 from musicapp.forms import ContactForm, SignupForm, SigninForm, UploadForm
 from musicapp.models import User, Song
 from musicapp import app, db, ALLOWED_EXTENSIONS
 import musicapp.fileupload as fileupload
+
+
 
 @app.route('/')
 def home():
@@ -109,3 +110,29 @@ def upload():
 		if f and allowed_file(f.filename):
 			retval = fileupload.upload(f,songdata)
 			return retval
+			
+
+@app.route('/sign_s3/')
+def sign_s3():
+	AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+	AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+	S3_BUCKET = os.environ.get('S3_BUCKET')
+	
+	object_name = urllib.quote_plus(request.args.get('file_name'))
+	mime_type = request.args.get('file_type')
+	
+	expires = int(time.time()+60*60*24)
+	amz_headers = "x-amz-acl:public-read"
+	
+	string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
+	print string_to_sign
+	signature = base64.encodestring(hmac.new(AWS_SECRET_ACCESS_KEY.encode(), string_to_sign.encode('utf8'), sha1).digest())
+	signature = urllib.quote_plus(signature.strip())
+	
+	url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
+	
+	content = json.dumps({
+		'signed_request': '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY_ID, expires, signature),
+		'url': url,
+	})
+	return content
