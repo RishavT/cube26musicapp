@@ -152,7 +152,10 @@ form input#submit:hover{
 /* Signup form */
 form input#firstname,
 form input#lastname,
-form input#password {
+form input#password,
+form input#name,
+form input#artist,
+form input#album {
 	width: 400px;
 	background-color: #fafafa;
 	-webkit-border-radius: 3px;

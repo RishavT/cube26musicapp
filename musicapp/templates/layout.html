@@ -2,7 +2,18 @@
 <html>
   <head>
     <title>Cube26 Music App</title>
-    <strong><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></strong>    
+    <strong><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></strong>
+    <script type="text/javascript" src="//api.filepicker.io/v2/filepicker.js"></script>
+    <script>
+	    filepicker.setKey("AlJgw2qgSsaTuk2G8CLAqz");
+		function upload() {
+			filepicker.pick(
+			function(Blob){
+		 	   console.log(Blob.url);
+		 	}
+		  );
+		}
+	</script>
   </head>
   <body>
    

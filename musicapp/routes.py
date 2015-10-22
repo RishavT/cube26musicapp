@@ -1,18 +1,18 @@
 #!/usr/bin/python
 import os
+#import eyes3
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-from werkzeug import generate_password_hash, check_password_hash
+from werkzeug import generate_password_hash, check_password_hash, secure_filename
 from flask import render_template, request, flash, session, url_for, redirect
 #WTF_CSRF_CHECK_DEFAULT = False
 #from db import Table, Column, Integer, ForeignKey
 #from db import relationship, backref
 
-from musicapp.forms import ContactForm, SignupForm, SigninForm
+from musicapp.forms import ContactForm, SignupForm, SigninForm, UploadForm
 from musicapp.models import User, Song
-from musicapp import app, db
-
-app.secret_key = 'development key'
+from musicapp import app, db, ALLOWED_EXTENSIONS
+import musicapp.fileupload as fileupload
 
 @app.route('/')
 def home():
@@ -88,3 +88,24 @@ def profile():
 		return redirect(url_for('signin'))
 	else:
 		return render_template('profile.html')
+
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+	form = UploadForm()
+	if request.method == 'GET':
+		if 'username' not in session:
+			return redirect(url_for('signin'))
+		return render_template('upload.html', form=form)
+	elif request.method == 'POST':
+		if not form.validate():
+			return render_template('upload.html', form=form)
+			
+		songdata = form.songdata
+		f = form.f.data
+		if f and allowed_file(f.filename):
+			retval = fileupload.upload(f,songdata)
+			return retval

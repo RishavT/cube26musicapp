@@ -30,9 +30,9 @@ class Song(db.Model):
 		
 	def get_song_details(self):
 		retval = {}
-		retval['name'] = self.songdata[0]
-		retval['album'] = self.songdata[1]
-		retval['artist'] = self.songdata[2]
+		retval['name'] = self.songdata.split("`")[0]
+		retval['album'] = self.songdata.split("`")[1]
+		retval['artist'] = self.songdata.split("`")[2]
 		return retval
 		
 	def upvote(user_id):

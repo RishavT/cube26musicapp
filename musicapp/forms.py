@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 from flask.ext.wtf import Form
-from wtforms import TextField, BooleanField, TextAreaField, SubmitField, PasswordField, ValidationError, validators
+from wtforms import TextField, BooleanField, TextAreaField, SubmitField, PasswordField, ValidationError, validators, FileField
 from musicapp.models import User,Song
 from flask import session
 #from hello import db
@@ -54,3 +54,25 @@ class SigninForm(Form):
 		else:
 			self.login.errors.append("Invalid username/e-mail or password")
 			return False
+
+class UploadForm(Form):
+	name = TextField("Song Name", [validators.Required("Please enter a Title")])
+	artist = TextField("Artist", [validators.Required("Please enter the Artist Name")])
+	album = TextField("Album", [validators.Required("Please enter the Album Name")])
+	f = FileField("File", [validators.Required("Please select a file to upload")])
+	submit = SubmitField("Upload")
+	
+	
+	songdata = ""
+	def __init__(self, *args, **kwargs):
+		Form.__init__(self, *args, **kwargs)
+	def validate(self):
+		if not Form.validate(self):
+			return False
+		self.songdata = self.name.data.lower() + '`' + self.album.data.lower() + '`' + self.artist.data.lower()
+		song = Song.query.filter_by(songdata = self.songdata).first()
+		if song:
+			self.name.errors.append("Song already exists in database")
+			return False
+		else:
+			return True
