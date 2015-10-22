@@ -40,7 +40,7 @@ def signup():
 			return render_template('signup.html', form=form)
 		else:
 			#return "[1] Create a new user [2] sign in the user [3] redirect to the user's profile"
-			if session['id'] != None:
+			if 'id' in session.keys():
 				return "Please log out before creating new account"
 			elif User.query.filter_by(email=form.email.data).all() != None:
 				return "An account already exists with the email address provided."
