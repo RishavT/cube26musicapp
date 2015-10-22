@@ -47,7 +47,7 @@ def signup():
 			elif User.query.filter_by(username=form.username.data).first() != None:
 				return "Nickname already exists, please use something else"
 			else:
-				user = User(form.data.username, form.data.email, form.data.password)
+				user = User(form.username.data, form.email.data, form.password.data)
 				db.session.add(user)
 				db.session.commit()
 				session['id'] = user.id
