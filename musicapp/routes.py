@@ -76,6 +76,10 @@ def signin():
 def signout():
 	if 'username' in session.keys():
 		session.pop('username')
+	if 'id' in session.keys():
+		session.pop('id')
+	if 'email' in session.keys():
+		session.pop('email')
 	return redirect(url_for('home'))
 		
 @app.route('/profile')
@@ -106,10 +110,16 @@ def upload():
 			return render_template('upload.html', form=form)
 			
 		songdata = form.songdata
-		f = form.f.data
-		if f and allowed_file(f.filename):
-			retval = fileupload.upload(f,songdata)
-			return retval
+		fileurl = form.fileurl.data
+		
+		#Add song to database if not already present
+		song = Song.query.filter_by(songdata = songdata).first()
+		if not song:
+			song = Song(songdata,fileurl,session['id'])
+			db.session.add(song)
+			db.session.commit()
+		return songdata + " " + fileurl
+		
 			
 
 @app.route('/sign_s3/')
@@ -118,7 +128,7 @@ def sign_s3():
 	AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 	S3_BUCKET = os.environ.get('S3_BUCKET')
 	
-	object_name = urllib.quote_plus(request.args.get('file_name'))
+	object_name = urllib.quote_plus(request.args.get('name') + '`' + request.args.get('album') + '`' + request.args.get('artist'))
 	mime_type = request.args.get('file_type')
 	
 	expires = int(time.time()+60*60*24)
@@ -130,7 +140,7 @@ def sign_s3():
 	signature = urllib.quote_plus(signature.strip())
 	
 	url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, object_name)
-	
+	#url = 'http://httpbin.org/put'
 	content = json.dumps({
 		'signed_request': '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY_ID, expires, signature),
 		'url': url,
