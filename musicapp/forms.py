@@ -29,5 +29,28 @@ class SignupForm(Form):
 		if user:
 			self.email.errors.append("That email is already taken")
 			return False
+		elif User.query.filter_by(username = self.username.data).first():
+			self.username.errors.append("That username is already taken")
 		else:
 			return True
+class SigninForm(Form):
+	login = TextField("Email or Username",  [validators.Required("Please enter your username or email address.")])
+	password = PasswordField('Password', [validators.Required("Please enter a password.")])
+	submit = SubmitField("Sign In")
+	
+	def __init__(self, *args, **kwargs):
+		Form.__init__(self, *args, **kwargs)
+		
+	def validate(self):
+		if not Form.validate(self):
+			return False
+			
+		user = User.query.filter_by(email = self.login.data.lower()).first()
+		if not user:
+			user = User.query.filter_by(username = self.login.data).first()
+		if user and user.check_password(self.password.data):
+			session['username'] = user.username
+			return True
+		else:
+			self.login.errors.append("Invalid username/e-mail or password")
+			return False

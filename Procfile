@@ -1,1 +1,1 @@
-web: gunicorn run:app --log-file=- -p 58227
+web: gunicorn run:app --log-file=log -p 58227

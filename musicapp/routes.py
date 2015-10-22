@@ -8,9 +8,9 @@ from flask import render_template, request, flash, session, url_for, redirect
 #from db import Table, Column, Integer, ForeignKey
 #from db import relationship, backref
 
-from musicapp.forms import ContactForm,SignupForm
-from musicapp.models import User,Song
-from musicapp import app,db
+from musicapp.forms import ContactForm, SignupForm, SigninForm
+from musicapp.models import User, Song
+from musicapp import app, db
 
 app.secret_key = 'development key'
 
@@ -33,6 +33,8 @@ def contact():
 
 @app.route('/signup',methods=['GET','POST'])
 def signup():
+	if 'username' in session:
+		return redirect(url_for('profile'))
 	form = SignupForm()
 	
 	if request.method == 'POST':
@@ -40,7 +42,7 @@ def signup():
 			return render_template('signup.html', form=form)
 		else:
 			#return "[1] Create a new user [2] sign in the user [3] redirect to the user's profile"
-			if 'id' in session.keys():
+			if 'username' in session.keys():
 				return "Please log out before creating new account"
 			elif User.query.filter_by(email=form.email.data).first() != None:
 				return "An account already exists with the email address provided."
@@ -50,17 +52,37 @@ def signup():
 				user = User(form.username.data, form.email.data, form.password.data)
 				db.session.add(user)
 				db.session.commit()
-				session['id'] = user.id
+				session['username'] = user.username
 				return redirect(url_for('profile'))
 	elif request.method == 'GET':
 		return render_template('signup.html', form=form)
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+	if 'username' in session:
+		return redirect(url_for('profile'))
+	form = SigninForm()
+	
+	if request.method == 'POST':
+		if form.validate() == False:
+			return render_template('signin.html', form=form)
+		else:
+			return redirect(url_for('profile'))
+	elif request.method == 'GET':
+		return render_template('signin.html', form=form)
+
+@app.route('/signout')
+def signout():
+	if 'username' in session.keys():
+		session.pop('username')
+	return redirect(url_for('home'))
 		
 @app.route('/profile')
 def profile():
-	if 'email' not in session:
+	if 'username' not in session:
 		return redirect(url_for('signin'))
 	
-	user = User.query.filter_by(email = session['email']).first()
+	user = User.query.filter_by(username = session['username']).first()
 	
 	if user is None:
 		return redirect(url_for('signin'))
