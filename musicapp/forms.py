@@ -3,6 +3,7 @@ import os
 from flask.ext.wtf import Form
 from wtforms import TextField, BooleanField, TextAreaField, SubmitField, PasswordField, ValidationError, validators
 from musicapp.models import User,Song
+from flask import session
 #from hello import db
 #WTF_CSRF_CHECK_DEFAULT = False
 class ContactForm(Form):
@@ -12,8 +13,7 @@ class ContactForm(Form):
 	message = TextAreaField("Message")
 	submit = SubmitField("Send")
 class SignupForm(Form):
-	firstname = TextField("First name",  [validators.Required("Please enter your first name.")])
-	lastname = TextField("Last name",  [validators.Required("Please enter your last name.")])
+	username = TextField("Nick",  [validators.Required("Please a suitable Nickname. You will be identified by your Nick.")])
 	email = TextField("Email",  [validators.Required("Please enter your email address."), validators.Email("Please enter your email address.")])
 	password = PasswordField('Password', [validators.Required("Please enter a password.")])
 	submit = SubmitField("Create account")
