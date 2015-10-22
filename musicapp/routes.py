@@ -122,7 +122,7 @@ def sign_s3():
 	mime_type = request.args.get('file_type')
 	
 	expires = int(time.time()+60*60*24)
-	amz_headers = "x-amz-acl:public-read\nAccess-Control-Allow-Origin:*"
+	amz_headers = "x-amz-acl:public-read"
 	
 	string_to_sign = "PUT\n\n%s\n%d\n%s\n/%s/%s" % (mime_type, expires, amz_headers, S3_BUCKET, object_name)
 	print string_to_sign
@@ -134,6 +134,5 @@ def sign_s3():
 	content = json.dumps({
 		'signed_request': '%s?AWSAccessKeyId=%s&Expires=%s&Signature=%s' % (url, AWS_ACCESS_KEY_ID, expires, signature),
 		'url': url,
-		'Access-Control-Allow-Origin' : '*'
 	})
 	return content
