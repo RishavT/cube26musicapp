@@ -1,3 +1,8 @@
 #!/bin/bash
+if [$2]
+  then
+    echo "adding files"
+    git add *
+fi
 git commit -a -m "$1"
 git push origin master
