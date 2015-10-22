@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ $2 -eq 1 ]
+if [ -n "$2" ]
   then
     echo "adding files"
     git add *
