@@ -19,11 +19,8 @@
 	<form action="{{ url_for('signup') }}" method=post>
 		{{ form.hidden_tag() }}
 		 
-		{{ form.firstname.label }}
-		{{ form.firstname }}
-		 
-		{{ form.lastname.label }}
-		{{ form.lastname }}
+		{{ form.username.label }}
+		{{ form.username }}
 		 
 		{{ form.email.label }}
 		{{ form.email }}
