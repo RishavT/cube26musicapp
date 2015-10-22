@@ -13,7 +13,7 @@ class ContactForm(Form):
 	message = TextAreaField("Message")
 	submit = SubmitField("Send")
 class SignupForm(Form):
-	username = TextField("Nick",  [validators.Required("Please a suitable Nickname. You will be identified by your Nick.")])
+	username = TextField("Username",  [validators.Required("Please a suitable Username. You will be identified by your Username.")])
 	email = TextField("Email",  [validators.Required("Please enter your email address."), validators.Email("Please enter your email address.")])
 	password = PasswordField('Password', [validators.Required("Please enter a password.")])
 	submit = SubmitField("Create account")
