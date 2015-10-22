@@ -42,7 +42,7 @@ def signup():
 			#return "[1] Create a new user [2] sign in the user [3] redirect to the user's profile"
 			if 'id' in session.keys():
 				return "Please log out before creating new account"
-			elif User.query.filter_by(email=form.email.data).all() != None:
+			elif User.query.filter_by(email=form.email.data).first() != None:
 				return "An account already exists with the email address provided."
 			elif User.query.filter_by(username=form.username.data).all() != None:
 				return "Nickname already exists, please use something else"
