@@ -227,3 +227,22 @@ def vote():
 		retval = song.downvote(session['id'])
 	db.session.commit()
 	return str(retval[0]) + " " + str(retval[1])
+	
+
+@app.route('/vote', methods=['GET','POST'])
+def cleanup():
+	if 'id' not in session:
+		return signup()
+	if session['id'] != 1:
+		return render_template('notice.html', message="You are not authorized to perform this action", redirec="/")
+	conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+	bucket = Bucket(conn, S3_BUCKET_NAME)
+	for key in bucket.list():
+		if 'static' in key.key:
+			if key.key.index('static') == 0:
+				continue
+		if 'logs' in key.key:
+			if key.key.index('logs') == 0:
+				continue
+		if Song.query.filter_by(songdata=key.key).first()=None:
+			bucket.delete_key(key)
