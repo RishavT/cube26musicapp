@@ -18,7 +18,7 @@ class Vote(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	vote = db.Column(db.Integer)
 	def __init__(self,songdata,user_id,vote):
-		self.songdata = songdata
+		self.songdata = songdata.lower()
 		self.user_id = user_id
 		self.vote = vote
 	def __repr__(self):
@@ -34,7 +34,7 @@ class Song(db.Model):
 	def __init__(self,songdata,link,user_id):
 		self.upvotes = 0
 		self.downvotes = 0
-		self.songdata = songdata
+		self.songdata = songdata.lower()
 		self.link = link
 		self.user_id = user_id
 
