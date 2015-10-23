@@ -24,7 +24,12 @@
     <button type=button id="SubmitButton" onclick="start_upload();">Upload</button>
     <button type=button id="gen-tag" onclick="loadFile(document.getElementById('f'));">Generate Tags</button>
   </form>
-  
+  <div id="FadeDiv" style="display:none;" class="fadeMe">
+  </div>
+  <div id="LoadingDiv" style="display:none;">
+    <h2>Uploading..</h2>
+	  <img src="https://s3-ap-southeast-1.amazonaws.com/rishavmusicapp/static/ajax-loader.2.gif" alt="" />
+  </div> 
   
   <script>
     function loadFile(input) {
@@ -101,17 +106,21 @@
     }
     function upload_file(file, signed_request, url){
     
-    var xhr = new XMLHttpRequest();
-    //var xhr = createCORSRequest("PUT", signed_request);
-    //if (!xhr)
-    //  console.log("cors not supported");
-    xhr.open("PUT", signed_request);
-    xhr.setRequestHeader('x-amz-acl', 'public-read');
-    //xhr.setRequestHeader('Origin','localhost');
-    xhr.onload = function() {
+       var xhr = new XMLHttpRequest();
+       var ldiv = document.getElementById('LoadingDiv');
+       var fadediv = document.getElementById('FadeDiv');
+       //var xhr = createCORSRequest("PUT", signed_request);
+       //if (!xhr)
+       //  console.log("cors not supported");
+       xhr.open("PUT", signed_request);
+       xhr.setRequestHeader('x-amz-acl', 'public-read');
+       //xhr.setRequestHeader('Origin','localhost');
+       xhr.onload = function() {
         console.log(xhr.responseText)
         if (xhr.status === 200) {
             console.log(url);
+            ldiv.style.display = 'none';
+            fadediv.style.display = 'none';
             alert("Upload Complete. You will be redirected to the home page in a moment now.");
             document.getElementById("fileurl").value=url;
             document.getElementById("uploadform").submit();
@@ -119,8 +128,12 @@
         }
         };
         xhr.onerror = function() {
-         alert("Could not upload file.");
+            ldiv.style.display = 'none';
+            fadediv.style.display = 'none';
+            alert("Could not upload file.");
          };
+        ldiv.style.display='block';
+        fadediv.style.display='block';
         xhr.send(file);
     }
   </script>
