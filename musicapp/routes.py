@@ -244,5 +244,5 @@ def cleanup():
 		if 'logs' in key.key:
 			if key.key.index('logs') == 0:
 				continue
-		if Song.query.filter_by(songdata=key.key).first()=None:
+		if Song.query.filter_by(songdata=key.key).first()==None:
 			bucket.delete_key(key)
