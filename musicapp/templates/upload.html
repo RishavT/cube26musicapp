@@ -107,20 +107,25 @@
       
       
     function get_signed_request(file){
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/sign_s3?artist="+document.getElementById("artist").value+"&album="+document.getElementById("album").value+"&name="+document.getElementById("name").value+"&file_type="+file.type);
-    xhr.onreadystatechange = function(){
-        if(xhr.readyState === 4){
-            if(xhr.status === 200){
-                var response = JSON.parse(xhr.responseText);
-                upload_file(file, response.signed_request, response.url);
+      var ldiv = document.getElementById('LoadingDiv');
+      var fadediv = document.getElementById('FadeDiv');
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/sign_s3?artist="+document.getElementById("artist").value+"&album="+document.getElementById("album").value+"&name="+document.getElementById("name").value+"&file_type="+file.type);
+      xhr.onreadystatechange = function(){
+          if(xhr.readyState === 4){
+              if(xhr.status === 200){
+                  var response = JSON.parse(xhr.responseText);
+                  upload_file(file, response.signed_request, response.url);
+              }
+              else{
+                  alert("Could not get signed URL.");
+              }
             }
-            else{
-                alert("Could not get signed URL.");
-            }
-          }
         };
+      ldiv.style.display='block';
+      fadediv.style.display='block';
       xhr.send();
+      
     }
     function upload_file(file, signed_request, url){
     
@@ -156,7 +161,7 @@
             fadediv.style.display = 'none';
             //alert("Upload Complete. You will be redirected to the home page in a moment now.");
             document.getElementById("fileurl").value=url;
-            clearFileInput("f");
+            document.getElementById("f").value = null;
             document.getElementById("uploadform").submit();
             
         }
