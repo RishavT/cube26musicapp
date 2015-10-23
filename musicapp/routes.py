@@ -61,14 +61,9 @@ def allsongs():
 def about():
 	return render_template('about.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET'])
 def contact():
-	form = ContactForm()
-	
-	if request.method == 'POST':
-		return 'Form posted.'
-	elif request.method == 'GET':
-		return render_template('contact.html', form=form)
+	return render_template('contact.html')
 
 @app.route('/signup',methods=['GET','POST'])
 def signup():

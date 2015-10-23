@@ -3,20 +3,8 @@
 {% block content %}
   <h2>Contact</h2>
   <form action="{{ url_for('contact') }}" method=post>
-    {{ form.hidden_tag() }}
- 
-    {{ form.name.label }}
-    {{ form.name }}
- 
-    {{ form.email.label }}
-    {{ form.email }}
- 
-    {{ form.subject.label }}
-    {{ form.subject }}
- 
-    {{ form.message.label }}
-    {{ form.message }}
- 
-    {{ form.submit }}
+    <h3>Contact me</h3>
+    <p>You can talk to me by dropping an email at:</p>
+    <p id="email">thakker (dot) rishav (at) gmail (dot) com</p>
   </form>
 {% endblock %}

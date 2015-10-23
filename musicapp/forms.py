@@ -6,12 +6,6 @@ from musicapp.models import User,Song
 from flask import session
 #from hello import db
 #WTF_CSRF_CHECK_DEFAULT = False
-class ContactForm(Form):
-	name = TextField("Name")
-	email = TextField("Email")
-	subject = TextField("Subject")
-	message = TextAreaField("Message")
-	submit = SubmitField("Send")
 class SignupForm(Form):
 	username = TextField("Username",  [validators.Required("Please a suitable Username. You will be identified by your Username.")])
 	email = TextField("Email",  [validators.Required("Please enter your email address."), validators.Email("Please enter your email address.")])
