@@ -2,7 +2,7 @@
  
 {% block content %}
   <h2>Upload a song</h2>
-  <form id="uploadform" action="{{ url_for('upload') }}" method=post enctype="multipart/form-data">
+  <form id="uploadform" action="{{ url_for('upload') }}" method="POST">
     {{ form.hidden_tag() }}
      
     {{ form.name.label }}
@@ -33,6 +33,22 @@
   <script src="https://raw.githubusercontent.com/aadsm/JavaScript-ID3-Reader/master/dist/id3-minimized.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script>
+    
+    function clearFileInput(id) 
+    { 
+        var oldInput = document.getElementById(id); 
+    
+        var newInput = document.createElement("input"); 
+    
+        newInput.type = "file"; 
+        newInput.id = oldInput.id; 
+        newInput.name = oldInput.name; 
+        newInput.className = oldInput.className; 
+        newInput.style.cssText = oldInput.style.cssText; 
+        // TODO: copy any other relevant attributes 
+    
+        oldInput.parentNode.replaceChild(newInput, oldInput); 
+    }
     
     function loadFile(input) {
       var file = input.files[0],
@@ -140,6 +156,7 @@
             fadediv.style.display = 'none';
             //alert("Upload Complete. You will be redirected to the home page in a moment now.");
             document.getElementById("fileurl").value=url;
+            clearFileInput("f");
             document.getElementById("uploadform").submit();
             
         }
