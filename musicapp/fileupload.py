@@ -13,11 +13,11 @@ client = dropbox.client.DropboxClient(access_token)
 #print 'linked account: ', client.account_info()
 
 def upload(f,songdata):
-	response = client.put_file('/' + songdata, f)
+	response = client.put_file('/' + songdata.lower() + '.mp3', f)
 	return response
 def download(songdata):
-	f, metadata = client.get_file_and_metadata('/' + songdata)
+	f, metadata = client.get_file_and_metadata('/' + songdata.lower() + '.mp3')
 	return (f,metadata)
 def delete(songdata):
-	response = client.file_delete('/' + songdata)
+	response = client.file_delete('/' + songdata.lower() + ".mp3")
 	return response

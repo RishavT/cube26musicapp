@@ -11,6 +11,19 @@ WTF_CSRF_CHECK_DEFAULT = False
 #from sqlalchemy.orm import relationship, backref
 #from sqlalchemy.ext.declarative import declarative_base
 
+
+class Vote(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	songdata = db.Column(db.String(500), db.ForeignKey('song.songdata'))
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	vote = db.Column(db.Integer)
+	def __init__(self,songdata,user_id,vote):
+		self.songdata = songdata
+		self.user_id = user_id
+		self.vote = vote
+	def __repr__(self):
+		return '<Vote %r>' % self.songdata + str(": ") + str(self.vote) + str("by ") + str(self.user_id)
+
 class Song(db.Model):
 	songdata = db.Column(db.String(500), primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -34,11 +47,38 @@ class Song(db.Model):
 		retval['album'] = self.songdata.split("`")[1]
 		retval['artist'] = self.songdata.split("`")[2]
 		return retval
+	
 		
-	def upvote(user_id):
-		self.upvotes += 1
-	def downvote(user_id):
-		self.downvote += 1
+	def upvote(self,user_id):
+		vote = Vote.query.filter_by(user_id=user_id,songdata=self.songdata).first()
+		if vote:
+			if vote.vote==-1:
+				self.upvotes += 1
+				self.downvotes -= 1
+				vote.vote = 1
+				db.session.commit()
+				
+		else:
+			vote = Vote(self.songdata,user_id,1)
+			self.upvotes += 1
+			db.session.add(vote)
+			db.session.commit()
+		return (self.upvotes,self.downvotes)
+			
+	def downvote(self,user_id):
+		vote = Vote.query.filter_by(user_id=user_id,songdata=self.songdata).first()
+		if vote:
+			if vote.vote==1:
+				vote.vote = -1
+				self.upvotes -= 1
+				self.downvotes += 1
+				db.session.commit()
+		else:
+			vote = Vote(self.songdata,user_id,-1)
+			self.downvotes += 1
+			db.session.add(vote)
+			db.session.commit()
+		return (self.upvotes,self.downvotes)
 
 class User(db.Model):
 	id = db.Column(db.Integer,primary_key=True)
@@ -46,7 +86,6 @@ class User(db.Model):
 	email = db.Column(db.String(120), unique=True)
 	pwdhash = db.Column(db.String(66))
 	songs = db.relationship(Song, backref='user')
-
 	def __init__(self,username,email,password):
 		self.username = username
 		self.email = email.lower()
@@ -63,3 +102,5 @@ class User(db.Model):
 	def get_song_list(self):
 		pass
 
+def get_user(song):
+	return User.query.filter_by(id=song.user_id).first().username

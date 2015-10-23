@@ -1,0 +1,114 @@
+{% if page > 0 %}
+<a id="prevbutton" href="{{ url_for('allsongs') }}?page={{ page-1 }}">Previous</a>
+{% endif %}
+{% if (page+1)*1 < song_count %}
+<a id="nextbutton" href="{{ url_for('allsongs') }}?page={{ page+1 }}">Next</a>
+{% endif %}
+<script>
+  function fix(str)
+  {
+    return str.replace("'","\\'");
+  }
+  function upvote(songdata)
+  {
+    console.log('upvoting');
+    xhr = new XMLHttpRequest();
+    var params = "songdata=" + songdata + "&vote=1";
+    xhr.open("GET","{{ url_for('vote') }}?" + params, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+    console.log(params);
+    xhr.onload = function() {
+      console.log('upvoted');
+      var x = parseInt(document.getElementById("upvotes").innerHTML.replace('(','').replace(')',''));
+      console.log(x);
+      //document.getElementById("upvotes").innerHTML='(' + (x+1) + ')';
+      console.log(xhr.responseText)
+      arr = xhr.responseText.split(" ");
+      document.getElementById("upvotes").innerHTML='(' + arr[0] + ')';
+      document.getElementById("downvotes").innerHTML='(' + arr[1] + ')';
+    };
+    xhr.send(null);
+  }
+  function downvote(songdata)
+  {
+    console.log('downvoting');
+    xhr = new XMLHttpRequest();
+    var params = "songdata=" + songdata + "&vote=-1";
+    xhr.open("GET","{{ url_for('vote') }}?" + params, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+    console.log(params);
+    xhr.onload = function() {
+      console.log('downvoted');
+      var x = parseInt(document.getElementById("downvotes").innerHTML.replace('(','').replace(')',''));
+      console.log(x);
+      document.getElementById("downvotes").innerHTML='(' + (x+1) + ')';
+      console.log(xhr.responseText)
+      arr = xhr.responseText.split(" ");
+      document.getElementById("upvotes").innerHTML='(' + arr[0] + ')';
+      document.getElementById("downvotes").innerHTML='(' + arr[1] + ')';
+    };
+    xhr.send(null);
+  }
+</script>
+
+<h3 id="songlist-header">All Songs</h3>
+
+
+<table style="width:100%">
+  <tr>
+    <th>Song Name</th>
+    <th>Song Artist</th>
+    <th>Song Album</th>
+    <th>Votes</th>
+    <th>Download</th>
+    <th>Play</th>
+    <th>Uploaded by</th>
+  </tr>
+  {% for x in song_list %}
+  <tr>
+    <script>console.log("{{ x.songdata }}");</script>
+    <td style="text-align:center">{{ x.songdata|get_name }}</td>
+    <td style="text-align:center">{{ x.songdata|get_artist }}</td>
+    <td style="text-align:center">{{ x.songdata|get_album }}</td>
+    <td style="text-align:centre">
+      <a href="#" onclick="upvote(&quot;{{ x.songdata }}&quot;);"><img  src="https://s3-ap-southeast-1.amazonaws.com/rishavmusicapp/static/16px-green-thumbs-up-clip-art-1626957.png" style="width:16px; height=16px;"></a>
+      <span id="upvotes">({{ x.upvotes }})</span>
+      <a href="#" onclick="downvote(&quot;{{ x.songdata }}&quot;);"><img src="https://s3-ap-southeast-1.amazonaws.com/rishavmusicapp/static/16px-download-1626958.png" style="width:16px; height:16px;"></a>
+      <span id="downvotes">({{ x.downvotes }})</span>
+    </td>
+    <td style="text-align:center"><a href="{{ x.link }}" download="{{ x.songdata|get_artist }} - {{ x.songdata|get_name }}">Download</a></td>
+    <td style="text-align:center">
+       <audio controls>
+          <source src="{{ x.link }}" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio> 
+    </td>
+    <td style="text-align:center">{{ x|get_user }}</td>
+    {% if x.user_id == session.id %}
+    <td style="text-align:center"><a href="{{ url_for('delete') }}?songdata={{ x.songdata }}" onclick="return confirm(fix('Are you sure you want to delete?'));">Delete</a></td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+</table>
+<br>
+<p style="text-align:center"><a href="{{ url_for('upload') }}">Upload a Song</a></p>
+
+<script>
+  var pos = window.location.href.search("user_id")
+  console.log(window.location.href);
+  console.log(pos);
+  if (pos != -1)
+  {
+    if (window.location.href.length > pos+7)
+    {
+      var char = window.location.href.charAt(pos+8);
+      console.log(char);
+      if (char == "{{ session['id'] }}")
+      {
+        document.getElementById("songlist-header").innerHTML = "My Songs";
+      }
+    }
+  }
+</script>

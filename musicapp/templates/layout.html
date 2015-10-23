@@ -4,16 +4,6 @@
     <title>Cube26 Music App</title>
     <strong><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></strong>
     <script type="text/javascript" src="//api.filepicker.io/v2/filepicker.js"></script>
-    <script>
-	    filepicker.setKey("AlJgw2qgSsaTuk2G8CLAqz");
-		function upload() {
-			filepicker.pick(
-			function(Blob){
-		 	   console.log(Blob.url);
-		 	}
-		  );
-		}
-	</script>
   </head>
   <body>
    
@@ -27,12 +17,13 @@
           <li><a href="{{ url_for('about') }}">About</a></li>
           <li><a href="{{ url_for('contact') }}">Contact</a></li>
           {% if 'username' in session %}
+          <li><a href="{{ url_for('allsongs') }}?user_id={{ session['id'] }}">My Songs</a></li>
           <li><a href="{{ url_for('upload') }}">Upload a Song</a></li>
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
-          <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
+          <li><a href="{{ url_for('signout') }}">Sign Out   </a></li>
           {% else %}
           <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-          <li><a href="{{ url_for('signin') }}">Sign In</a></li>
+          <li><a href="{{ url_for('signin') }}">Sign In   </a></li>
           {% endif %}
         </ul>
     </nav></strong>
