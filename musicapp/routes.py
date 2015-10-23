@@ -9,7 +9,7 @@ from hashlib import sha1
 import time, os, json, base64, hmac, urllib
 
 
-from musicapp.forms import ContactForm, SignupForm, SigninForm, UploadForm
+from musicapp.forms import SignupForm, SigninForm, UploadForm
 from musicapp.models import User, Song, Vote
 from musicapp import app, db, ALLOWED_EXTENSIONS, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME
 import musicapp.fileupload as fileupload

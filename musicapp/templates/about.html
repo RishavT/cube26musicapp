@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
   
 {% block content %}
-  <h2>About</h2>
-  <p>This is an About page for the Rishav Music Player Assignment. Don't I look good? Oh stop, you're making me blush.</p>
+  <div class="jumbo">
+    <h2>About</h2>
+    <p style="text-align: center;">Stream, Download, Upload music. Have questions? <a href= {{ url_for('contact') }}>Contact</a> me. And make sure you upload only free to share music ;)</p>
+  </div>
 {% endblock %}

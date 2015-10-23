@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
  
 {% block content %}
+  <div class="jumbo">
   <h2>Contact</h2>
   <form action="{{ url_for('contact') }}" method=post>
-    <h3>Contact me</h3>
-    <p>You can talk to me by dropping an email at:</p>
-    <p id="email">thakker (dot) rishav (at) gmail (dot) com</p>
+    <p style="text-align:center;">You can reach me by dropping an email at:</p>
+    <p style="text-align:center;" id="email">thakker (dot) rishav (at) gmail (dot) com</p>
   </form>
+  </div>
 {% endblock %}
