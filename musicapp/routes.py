@@ -274,7 +274,7 @@ def cleanup():
 				continue
 		if Song.query.filter_by(songdata=key.key).first()==None:
 			bucket.delete_key(key)
-
+	return render_template('notice.html', message='Cleanup successful.', redirect='/')
 @app.route('/changepassword', methods=['POST'])
 def change_pass():
 	if 'id' not in session:
