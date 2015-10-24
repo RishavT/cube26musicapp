@@ -9,6 +9,7 @@
       {
         var regex = /\[((?:ftp|http)s?:\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?)\]/gi;
         urlified = text.replace(regex, '<a href="$1" class="exturl">$1</a>');
+        urlified = encodeURIComponent(urlified)
         return urlified;
       }
     </script>

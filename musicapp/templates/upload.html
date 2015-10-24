@@ -109,14 +109,16 @@
       var ldiv = document.getElementById('LoadingDiv');
       var fadediv = document.getElementById('FadeDiv');
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", URLify("/sign_s3?artist="+ document.getElementById("artist").value+"&album="+document.getElementById("album").value+"&name="+document.getElementById("name").value+"&file_type="+file.type));
+      console.log("/sign_s3?artist="+ URLify(document.getElementById("artist").value)+"&album="+URLify(document.getElementById("album").value)+"&name="+URLify(document.getElementById("name").value)+"&file_type="+URLify(file.type));
+      xhr.open("GET", "/sign_s3?artist="+ URLify(document.getElementById("artist").value)+"&album="+URLify(document.getElementById("album").value)+"&name="+URLify(document.getElementById("name").value)+"&file_type="+URLify(file.type));
       xhr.onreadystatechange = function(){
           if(xhr.readyState === 4){
               if(xhr.status === 200){
                   var response = JSON.parse(xhr.responseText);
                   upload_file(file, response.signed_request, response.url);
               }
-              else{
+                  else{ldiv.style.display='none';
+                  fadediv.style.display='none';
                   alert("Could not get signed URL.");
               }
             }
