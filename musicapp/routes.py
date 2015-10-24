@@ -209,26 +209,29 @@ def sign_s3():
 def delete():
 	#try:
 	songdata = request.args.get('songdata')
+	
 	song = Song.query.filter_by(songdata=songdata).first()
-	
-	conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
-
-	b = Bucket(conn, S3_BUCKET_NAME)
-
-	k = Key(b)
-
-	k.key = songdata.lower() + '.mp3'
-
-	b.delete_key(k)
-	
 	votes = Vote.query.filter_by(songdata=song.songdata).all()
 	for x in votes:
 		db.session.delete(x)
 	db.session.commit()
 	db.session.delete(song)
 	db.session.commit()
+	
+	try:
+		conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+
+		b = Bucket(conn, S3_BUCKET_NAME)
+
+		k = Key(b)
+
+		k.key = songdata.lower() + '.mp3'
+	except:
+		pass
+
+	b.delete_key(k)
 	return render_template('notice.html', message="Delete successful.", redirect="/")
-		#return render_template('notice.html', message="Could not process your request, pleast try again later.")
+	#return render_template('notice.html', message="Could not process your request, pleast try again later.")
 
 @app.route('/vote', methods=['GET','POST'])
 def vote():
