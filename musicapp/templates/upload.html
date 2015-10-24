@@ -33,7 +33,6 @@
   <script src="https://raw.githubusercontent.com/aadsm/JavaScript-ID3-Reader/master/dist/id3-minimized.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script>
-    
     function clearFileInput(id) 
     { 
         var oldInput = document.getElementById(id); 
@@ -110,7 +109,7 @@
       var ldiv = document.getElementById('LoadingDiv');
       var fadediv = document.getElementById('FadeDiv');
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", "/sign_s3?artist="+document.getElementById("artist").value+"&album="+document.getElementById("album").value+"&name="+document.getElementById("name").value+"&file_type="+file.type);
+      xhr.open("GET", URLify("/sign_s3?artist="+ document.getElementById("artist").value+"&album="+document.getElementById("album").value+"&name="+document.getElementById("name").value+"&file_type="+file.type));
       xhr.onreadystatechange = function(){
           if(xhr.readyState === 4){
               if(xhr.status === 200){

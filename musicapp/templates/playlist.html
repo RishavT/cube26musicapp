@@ -30,7 +30,7 @@
     console.log('upvoting');
     xhr = new XMLHttpRequest();
     var params = "songid=" + id + "&vote=1";
-    xhr.open("GET","{{ url_for('vote') }}?" + params, true);
+    xhr.open("GET",URLify("{{ url_for('vote') }}?" + params), true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     
     console.log(params);
@@ -51,7 +51,7 @@
     console.log('downvoting');
     xhr = new XMLHttpRequest();
     var params = "songid=" + id + "&vote=-1";
-    xhr.open("GET","{{ url_for('vote') }}?" + params, true);
+    xhr.open("GET",URLify("{{ url_for('vote') }}?" + params), true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     
     console.log(params);
@@ -112,10 +112,17 @@
     <td style="text-align:center">{{ x.songdata|get_artist }}</td>
     <td style="text-align:center">{{ x.songdata|get_album }}</td>
     <td style="text-align:centre">
+      {% if 'username' in session %}
       <a href="#" onclick="upvote({{ x.id }});"><img  src="https://s3-ap-southeast-1.amazonaws.com/rishavmusicapp/static/16px-green-thumbs-up-clip-art-1626957.png" style="width:16px; height=16px;"></a>
       <span id="upvotes{{ x.id }}">({{ x.upvotes }})</span>
       <a href="#" onclick="downvote({{ x.id }});"><img src="https://s3-ap-southeast-1.amazonaws.com/rishavmusicapp/static/16px-download-1626958.png" style="width:16px; height:16px;"></a>
       <span id="downvotes{{ x.id }}">({{ x.downvotes }})</span>
+      {% else %}
+      <a href="#" onclick="alert('Please log in to vote')"><img  src="https://s3-ap-southeast-1.amazonaws.com/rishavmusicapp/static/16px-green-thumbs-up-clip-art-1626957.png" style="width:16px; height=16px;"></a>
+      <span id="upvotes{{ x.id }}">({{ x.upvotes }})</span>
+      <a href="#" onclick="alert('Please log in to vote')"><img src="https://s3-ap-southeast-1.amazonaws.com/rishavmusicapp/static/16px-download-1626958.png" style="width:16px; height:16px;"></a>
+      <span id="downvotes{{ x.id }}">({{ x.downvotes }})</span>
+      {% endif %}
     </td>
     <td style="text-align:center"><a href="{{ x.link }}" download="{{ x.songdata|get_artist }} - {{ x.songdata|get_name }}">Download</a></td>
     <td style="text-align:center">

@@ -4,6 +4,14 @@
     <title>Rishav Music App</title>
     <strong><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></strong>
     <script type="text/javascript" src="//api.filepicker.io/v2/filepicker.js"></script>
+    <script>
+      function URLify(text)
+      {
+        var regex = /\[((?:ftp|http)s?:\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?)\]/gi;
+        urlified = text.replace(regex, '<a href="$1" class="exturl">$1</a>');
+        return urlified;
+      }
+    </script>
   </head>
   <body>
    
