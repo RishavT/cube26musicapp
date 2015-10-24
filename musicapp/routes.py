@@ -257,7 +257,7 @@ def vote():
 	return str(retval[0]) + " " + str(retval[1])
 	
 
-@app.route('/vote', methods=['GET','POST'])
+@app.route('/cleanup', methods=['GET','POST'])
 def cleanup():
 	if 'id' not in session:
 		return signin()
