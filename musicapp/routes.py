@@ -208,9 +208,9 @@ def sign_s3():
 @app.route('/delete')
 def delete():
 	#try:
-	songdata = request.args.get('songdata')
+	songid = int(request.args.get('songid'))
 	
-	song = Song.query.filter_by(songdata=songdata).first()
+	song = Song.query.filter_by(id=songid).first()
 	votes = Vote.query.filter_by(songdata=song.songdata).all()
 	for x in votes:
 		db.session.delete(x)

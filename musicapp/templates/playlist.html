@@ -133,7 +133,7 @@
     </td>
     <td style="text-align:center">{{ x|get_user }}</td>
     {% if x.user_id == session.id %}
-    <td style="text-align:center"><a href="{{ url_for('delete') }}?songdata={{ x.songdata }}" onclick="return confirm(fix('Are you sure you want to delete?'));">Delete</a></td>
+    <td style="text-align:center"><a href="{{ url_for('delete') }}?songid={{ x.id }}" onclick="return confirm(fix('Are you sure you want to delete?'));">Delete</a></td>
     {% endif %}
   </tr>
   {% endfor %}
