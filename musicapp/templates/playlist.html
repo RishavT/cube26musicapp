@@ -30,7 +30,7 @@
     console.log('upvoting');
     xhr = new XMLHttpRequest();
     var params = "songid=" + id + "&vote=1";
-    xhr.open("GET","{{ url_for('vote') }}?" + URLify(params), true);
+    xhr.open("GET","{{ url_for('vote') }}?" + params, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     
     console.log(params);
@@ -51,7 +51,7 @@
     console.log('downvoting');
     xhr = new XMLHttpRequest();
     var params = "songid=" + id + "&vote=-1";
-    xhr.open("GET","{{ url_for('vote') }}?" + URLify(params), true);
+    xhr.open("GET","{{ url_for('vote') }}?" + params, true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     
     console.log(params);
