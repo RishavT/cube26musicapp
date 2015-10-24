@@ -226,10 +226,11 @@ def delete():
 		k = Key(b)
 
 		k.key = songdata.lower() + '.mp3'
+	
+
+		b.delete_key(k)
 	except:
 		pass
-
-	b.delete_key(k)
 	return render_template('notice.html', message="Delete successful.", redirect="/")
 	#return render_template('notice.html', message="Could not process your request, pleast try again later.")
 
