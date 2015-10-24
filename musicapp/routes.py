@@ -11,7 +11,7 @@ import time, os, json, base64, hmac, urllib, string, random
 from musicapp.forms import SignupForm, SigninForm, UploadForm, ForgotPassForm
 from musicapp.models import User, Song, Vote
 from musicapp import app, db, ALLOWED_EXTENSIONS, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME
-import musicapp.fileupload as fileupload
+#import musicapp.fileupload as fileupload
 import send_email
 def playlist(html):
 	song_count = Song.query.count()

@@ -4,3 +4,12 @@ Features:
 >User management -> Log in, Sign up, Forgot password - new password sent to user's email.
 >Song management -> Upload song (if logged in), upvote/downvote a song, play/download/search all songs, sort playlist by upvotes/downvotes/name, delete songs uploaded by you.
 
+Libraries used:
+>flask
+>SQLAlchemy
+>wtforms (came with flask)
+>Jinja2 (came with flask)
+>smtplib for sending email
+>boto for amazon web services s3 file hosting
+>werkzeug for password hashing
+
