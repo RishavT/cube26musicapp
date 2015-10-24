@@ -25,7 +25,8 @@ class Vote(db.Model):
 		return '<Vote %r>' % self.songdata + str(": ") + str(self.vote) + str("by ") + str(self.user_id)
 
 class Song(db.Model):
-	songdata = db.Column(db.String(500), primary_key=True)
+	id = db.Column(db.Integer, primary_key=True)
+	songdata = db.Column(db.String(500), unique=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	link = db.Column(db.String(500))
 	upvotes = db.Column(db.Integer)

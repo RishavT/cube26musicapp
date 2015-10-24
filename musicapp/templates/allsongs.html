@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
   <div class="jumbo">
+  <div class="innercont">
     <br>
     {% if empty == 0 %}
       {% include "playlist.html" %}
     {% else %}
       <p style="text-align:center;">The song database seems to be empty. How about you start off by <a href ="{{ url_for('upload') }}">uploading</a> one?</p>
     {% endif %}
+  </div>
   </div>
 {% endblock %}

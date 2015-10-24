@@ -1,13 +1,15 @@
 {% extends "layout.html" %}
 {% block content %}
   <div class="jumbo">
-    <h2>Welcome to the Rishav Music app</h2>
-    <p style="text-align:center;">Here you will find songs uploaded by users around the internet. <a href ="{{ url_for('upload') }}">Upload a song of your own!</a><p>
-    <br>
-    {% if empty == 0 %}
-      {% include "playlist.html" %}
-    {% else %}
-      <p style="text-align:center;">The song database seems to be empty. How about you start off by <a href ="{{ url_for('upload') }}">uploading</a> one?</p>
-    {% endif %}
+    <div class="innercont">
+      <h2>Welcome to the Rishav Music app</h2>
+      <p style="text-align:center;">Here you will find songs uploaded by users around the internet. <a href ="{{ url_for('upload') }}">Upload a song of your own!</a></p>
+      <br>
+      {% if empty == 0 %}
+        {% include "playlist.html" %}
+      {% else %}
+        <p style="text-align:center;">The song database seems to be empty. How about you start off by <a href ="{{ url_for('upload') }}">uploading</a> one?</p>
+      {% endif %}
+    </div>
   </div>
 {% endblock %}

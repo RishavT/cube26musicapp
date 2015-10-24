@@ -1,4 +1,4 @@
-#!/usr/bin/python
+	#!/usr/bin/python
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash, secure_filename
@@ -6,14 +6,13 @@ from flask import render_template, request, flash, session, url_for, redirect
 from boto.s3.connection import S3Connection, Bucket, Key
 
 from hashlib import sha1
-import time, os, json, base64, hmac, urllib
+import time, os, json, base64, hmac, urllib, string, random
 
-
-from musicapp.forms import SignupForm, SigninForm, UploadForm
+from musicapp.forms import SignupForm, SigninForm, UploadForm, ForgotPassForm
 from musicapp.models import User, Song, Vote
 from musicapp import app, db, ALLOWED_EXTENSIONS, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME
 import musicapp.fileupload as fileupload
-
+import send_email
 def playlist(html):
 	song_count = Song.query.count()
 	if song_count == 0:
@@ -36,17 +35,43 @@ def playlist(html):
 		if request.args.get('reverse') in ['0','1']:
 			reverse = int(request.args.get('reverse'))
 	if 'sort' in request.args:
-		if request.args['sort'] == songdata:
+		if request.args['sort'] == 'songdata':
 			order_by = 'songdata'
 		elif request.args['sort'] == 'votes':
 			order_by = 'upvotes' if reverse == 0 else 'downvotes'
-	if 'user_id' in request.args:
+		elif request.args['sort'] in ['upvotes','downvotes']:
+			order_by = request.args['sort']
+	temp_query = Song.query
+	try:
+		if 'search' in request.args:
+			temp_query = temp_query.filter(Song.songdata.like('%' + request.args['search'].lower() + '%'))
+		if 'user_id' in request.args:
+			temp_query = temp_query.filter_by(user_id=int(request.args.get('user_id')))
+		if order_by == 'upvotes':
+			song_list = temp_query.order_by(Song.upvotes.desc()).offset(page).limit(song_limit).all()
+		elif order_by == 'downvotes':
+			song_list = temp_query.order_by(db.desc(Song.downvotes)).offset(page).limit(song_limit).all()
+		else:
+			song_list = temp_query.order_by(order_by).offset(page).limit(song_limit).all()
+	except:
+		song_list = Song.query.order_by(Song.upvotes.desc()).offset(page).limit(song_limit).all()
+	"""if 'user_id' in request.args:
 		try:
-			song_list = Song.query.filter_by(user_id=int(request.args.get('user_id'))).order_by(order_by).offset(page).limit(song_limit).all()
+			if 'search' in request.args:
+				temp_query = Song.query.filter(Song.songdata.like('%' + request.args['search'].lower() + '%'))
+				temp_query = temp_query.filter_by(user_id=int(request.args.get('user_id')))
+			else:
+				temp_query = Song.query.filter_by(user_id=int(request.args.get('user_id')))
+			if order_by == 'upvotes':
+				song_list = temp_query.order_by(Song.upvotes.desc()).offset(page).limit(song_limit).all()
+			elif order_by == 'downvotes':
+				song_list = temp_query.order_by(db.desc(Song.downvotes)).offset(page).limit(song_limit).all()
+			else:
+				song_list = temp_query.filter_by(user_id=int(request.args.get('user_id'))).order_by(order_by).offset(page).limit(song_limit).all()
 		except (TypeError, ValueError) as e:
 			song_list = Song.query.order_by(order_by).offset(page).limit(song_limit).all()
 	else:
-		song_list = Song.query.order_by(order_by).offset(page).limit(song_limit).all()
+		song_list = Song.query.order_by(order_by).offset(page).limit(song_limit).all()"""
 	return render_template(html, song_list=song_list, User=User,empty=0, page=page, song_count=song_count)
 
 @app.route('/')
@@ -123,11 +148,11 @@ def profile():
 		return redirect(url_for('signin'))
 	
 	user = User.query.filter_by(username = session['username']).first()
-	
 	if user is None:
 		return redirect(url_for('signin'))
 	else:
-		return render_template('profile.html')
+		song_count = len(user.songs)
+		return render_template('profile.html', song_count=song_count)
 
 
 def allowed_file(filename):
@@ -210,15 +235,18 @@ def vote():
 	retval = None
 	if 'id' not in session:
 		return signup()
-	if 'songdata' not in request.args:
-		return "-1 nosongdata"
+	if 'songid' not in request.args:
+		return "-1 nosongid"
 	if 'vote' not in request.args:
 		return "-1 novote"
 	vote = request.args.get('vote')
 	if vote not in ['-1','1']:
 		return "-1 invalid vote"
-	songdata = request.args.get('songdata')
-	song = Song.query.filter_by(songdata=songdata).first()
+	try:	
+		songid = int(request.args.get('songid'))
+	except Exception:
+		return "-1 invalid songid"
+	song = Song.query.filter_by(id=songid).first()
 	if not song:
 		return "-1" + songdata
 	if vote == '1':
@@ -232,9 +260,9 @@ def vote():
 @app.route('/vote', methods=['GET','POST'])
 def cleanup():
 	if 'id' not in session:
-		return signup()
+		return signin()
 	if session['id'] != 1:
-		return render_template('notice.html', message="You are not authorized to perform this action", redirec="/")
+		return render_template('notice.html', message="You are not authorized to perform this action", redirect="/")
 	conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
 	bucket = Bucket(conn, S3_BUCKET_NAME)
 	for key in bucket.list():
@@ -246,3 +274,34 @@ def cleanup():
 				continue
 		if Song.query.filter_by(songdata=key.key).first()==None:
 			bucket.delete_key(key)
+
+@app.route('/changepassword', methods=['POST'])
+def change_pass():
+	if 'id' not in session:
+		return signin()
+	oldpass = request.form['oldpass']
+	newpass = request.form['newpass']
+	user = User.query.filter_by(id=session['id']).first()
+	if user.check_password(oldpass):
+		user.set_password(newpass)
+		db.session.commit()
+		return render_template('notice.html', message="Password changed successfully.", redirect=url_for('profile'))
+	else:
+		return render_template('notice.html', message='Invalid password, please try again', redirect=url_for('profile'))
+
+@app.route('/forgotpassword', methods=['GET','POST'])
+def forgot_pass():
+	form = ForgotPassForm()
+	if 'id' in session:
+		return render_template('notice.html', message='Please sign out before proceeding.', redirect='/')
+	if request.method == 'GET':
+		return render_template('forgotpassword.html', form=form)
+	else:
+		user = User.query.filter_by(email=request.form['email']).first()
+		
+		password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(7))
+		user.set_password(password)
+		db.session.commit()
+		send_email.send_email(user.email, password)
+		
+		return render_template('notice.html', message='Password reset. Please check your email address.',redirect='/')

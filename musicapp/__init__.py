@@ -8,6 +8,8 @@ def get_album(string):
 	return string.strip().split('`')[1].title()
 def get_artist(string):
 	return string.strip().split('`')[2].title()
+def length(x):
+	return len(x)
 
 app = Flask(__name__)
 #UPLOAD_FOLDER = './tmp'

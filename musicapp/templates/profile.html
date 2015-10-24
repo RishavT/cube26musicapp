@@ -1,7 +1,24 @@
 {% extends "layout.html" %}
 {% block content %}
   <div class="jumbo">
-    <h2>Profile<h2>
-    <h3>This is {{ session['username'] }}'s profile page<h3>
+    <div class="innercont">
+      <div style="text-align:center">
+        <h2>Profile</h2>
+        <h3>This is {{ session['username'] }}'s profile page</h3>
+        <p>Username: {{ session['username'] }}</p>
+        <p>Email: {{ session['email'] }}</p>
+        <p>Number of Songs uploaded: {{ song_count }}</p>
+        <br>
+        <h3>Change Password</h3>
+        <form enctype=multipart/form-data action="{{ url_for('change_pass') }}" method=post>
+          <label>Old Password</label>
+          <input type=password id="oldpass" name="oldpass">
+          <label>New Password</label>
+          <input type=password id="newpass" name="newpass">
+          <br>
+          <button type=submit>Reset Password</button>
+        </form>
+      </div>
+    </div>
   </div>
 {% endblock %}

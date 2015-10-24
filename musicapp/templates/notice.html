@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
   <div class="jumbo">
-    <script>
-      alert("{{ message }}" + " You will be now redirected in a moment.");
-      window.location='{{ redirect }}';
-    </script>
+    <div class="innercont">
+      <script>
+        alert("{{ message }}" + " You will be now redirected in a moment.");
+        window.location='{{ redirect }}';
+      </script>
+    </div>
   </div>
 {% endblock %}

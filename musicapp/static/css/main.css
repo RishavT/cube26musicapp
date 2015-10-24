@@ -39,6 +39,10 @@ header h1.logo:hover {
   width: 80%;
   margin: 0 auto;
 }
+
+div.innercont {
+  margin:20px;
+}
  
 div.jumbo {
   padding: 10px 0 30px 0;
@@ -208,3 +212,23 @@ div.fadeMe {
   position:   fixed; 
 }
 
+#sorter {
+  text-align:center;
+  float:right;
+  margin-right:10px;
+}
+#searchbar {
+  text-aligh:center;
+  float: right;
+  margin-right:20px;
+}
+
+table {
+  margin-top:100px;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+th,td {
+  border: 1px solid;
+  border-collapse: collapse;
+}

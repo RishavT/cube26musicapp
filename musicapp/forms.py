@@ -73,3 +73,17 @@ class UploadForm(Form):
 			return False
 		else:
 			return True
+class ForgotPassForm(Form):
+	email = TextField("Email", [validators.Required("Please enter an email address"), validators.Email("Please enter a valid email address")])
+	submit = SubmitField("Reset Password")
+	def __inint__(self, *args, **kwargs):
+		Form.__init__(self, *args, **kwargs)
+	def validate(self):
+		if not Form.validate(self):
+			return False
+		user = User.query.filter_by(email=email).first()
+		if not user:
+			self.email.errors.append("Email address not registered. Please sign up for a new account.")
+			return False
+		else:
+			return True
