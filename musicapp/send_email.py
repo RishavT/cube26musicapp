@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import smtplib
+import os
+from musicapp import GMAIL_USERNAME,GMAIL_PASS
 def send_email(email, passw):
 	# Specifying the from and to addresses
 
@@ -12,9 +14,8 @@ def send_email(email, passw):
 
 	# Gmail Login
 
-	username = 'rishavbot'
-	password = 'FF^FFS$$D&G123'
-
+	username = GMAIL_USERNAME
+	password = GMAIL_PASS
 	# Sending the mail  
 
 	server = smtplib.SMTP('smtp.gmail.com:587')
